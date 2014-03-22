@@ -3,24 +3,29 @@
   <head>
     {% leaflet_js %}
     {% leaflet_css %}
-    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
     <style>
         .leaflet-container { height: 100%; }
     </style>
   </head>
   <body>
     <h1>Django-Leaflet</h1>
-    {% leaflet_map "main" callback="main_map_init" %}
+    {% leaflet_map "main" %}
 
     <script type="text/javascript">
-        function main_map_init (map, options) {
-            var dataurl = '{% url "data" %}';
-            // Download GeoJSON via Ajax
-            $.getJSON(dataurl, function (data) {
-                // Add GeoJSON layer
-                L.geoJson(data).addTo(map);
-            });
-        }
+        window.addEventListener('map:init', function (e) {
+            var map = e.detail.map,
+                dataurl = '{% url "data" %}',
+                xmlhttp = new XMLHttpRequest();
+            xmlhttp.onreadystatechange = function (data) {
+                if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+                    // Add GeoJSON layer
+                    L.geoJson(JSON.parse(xmlhttp.responseText))
+                     .addTo(map);
+                }
+            }
+            xmlhttp.open('GET', dataurl)
+            xmlhttp.send()
+        });
     </script>
     
   </body>
