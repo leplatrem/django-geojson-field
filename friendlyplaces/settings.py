@@ -20,7 +20,6 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.admin',
     'leaflet',
-    'djgeojson',
     'friendlyplaces',
 )
 
@@ -32,15 +31,5 @@ DATABASES = {
         'PASSWORD': '',
         'HOST': '',
         'PORT': '',
-    }
-}
-
-SERIALIZATION_MODULES = {
-    'geojson': 'djgeojson.serializers'
-}
-
-LEAFLET_CONFIG = {
-    'PLUGINS': {
-        'forms': {'auto-include': True}
     }
 }
